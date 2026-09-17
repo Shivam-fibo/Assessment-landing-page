@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 export interface StepItem {
   number: string;
@@ -12,81 +12,75 @@ export interface StepItem {
 interface StepNavigationProps {
   steps: readonly StepItem[];
   activeIndex: number;
+  direction?: number;
   onStepClick: (index: number) => void;
 }
 
 export default function StepNavigation({
   steps,
   activeIndex,
+  direction = 1,
   onStepClick,
 }: StepNavigationProps): React.ReactElement {
+  const currentStep = steps[activeIndex] || steps[0];
+
+  const slideUpVariants = {
+    enter: (dir: number) => ({
+      y: dir > 0 ? 35 : -35,
+      opacity: 0,
+      filter: "blur(4px)",
+    }),
+    center: {
+      y: 0,
+      opacity: 1,
+      filter: "blur(0px)",
+    },
+    exit: (dir: number) => ({
+      y: dir > 0 ? -35 : 35,
+      opacity: 0,
+      filter: "blur(4px)",
+    }),
+  };
+
   return (
-    <div className="relative flex flex-col justify-center space-y-6">
-      {/* Background Connecting Timeline */}
-      <div className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-slate-200" />
+    <div className="flex flex-col gap-6">
+      {/* Step Counter Indicator Header */}
 
-      {steps.map((step, index) => {
-        const isActive = index === activeIndex;
-
-        return (
-          <div
-            key={step.number}
-            onClick={() => onStepClick(index)}
-            className="group relative flex cursor-pointer items-start gap-4 transition-all duration-300"
+      {/* Single Active Step - Vertical Text Slider */}
+      <div className="relative min-h-[160px] overflow-hidden">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={activeIndex}
+            custom={direction}
+            variants={slideUpVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              duration: 0.4,
+              ease: [0.25, 1, 0.5, 1],
+            }}
+            className="flex flex-col gap-3"
           >
-            {/* Step Number Circle / Indicator Badge */}
-            <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-300">
-              {isActive ? (
-                <motion.div
-                  layoutId="activeStepCircle"
-                  className="absolute inset-0 rounded-full bg-orange-500 shadow-md shadow-orange-500/30"
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-              ) : (
-                <div className="absolute inset-0 rounded-full border-2 border-slate-200 bg-white group-hover:border-slate-300" />
-              )}
-              <span
-                className={`relative z-10 text-xs font-bold transition-colors duration-300 ${
-                  isActive
-                    ? "text-white"
-                    : "text-slate-500 group-hover:text-slate-800"
-                }`}
-              >
-                {step.number}
+            {/* Step Badge & Title */}
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 text-xs font-bold text-white shadow-sm shadow-orange-500/30">
+                {currentStep.number}
               </span>
-            </div>
-
-            {/* Content Area */}
-            <div className="pt-1.5 flex-1">
-              <h3
-                className={`text-lg font-bold tracking-tight transition-colors duration-300 sm:text-xl ${
-                  isActive
-                    ? "text-slate-900"
-                    : "text-slate-400 group-hover:text-slate-600"
-                }`}
-              >
-                {step.title}
+              <h3 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+                {currentStep.title}
               </h3>
-
-              {/* Animated Expandable Body Description */}
-              <motion.div
-                initial={false}
-                animate={{
-                  height: isActive ? "auto" : 0,
-                  opacity: isActive ? 1 : 0,
-                  marginTop: isActive ? 8 : 0,
-                }}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="overflow-hidden"
-              >
-                <p className="max-w-md text-sm leading-relaxed text-slate-600">
-                  {step.body}
-                </p>
-              </motion.div>
             </div>
-          </div>
-        );
-      })}
+
+            {/* Step Body Description */}
+            <p className="max-w-md text-base leading-relaxed text-slate-600 pt-1">
+              {currentStep.body}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+    
     </div>
   );
 }

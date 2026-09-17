@@ -18,7 +18,7 @@ export default function ProductFrame({ children, activeStep }: ProductFrameProps
   return (
     <div className="relative w-full max-w-2xl">
       {/* Subtle ambient glow behind card */}
-      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-orange-500/15 via-amber-500/10 to-orange-400/15 blur-xl opacity-70 transition-all duration-500" />
+
 
       {/* Main Frame */}
       <div className="relative flex w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">

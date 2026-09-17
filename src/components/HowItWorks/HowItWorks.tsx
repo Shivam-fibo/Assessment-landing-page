@@ -35,6 +35,8 @@ export const STEPS = [
 export default function HowItWorks(): React.ReactElement {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const prevIndexRef = useRef(0);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -58,7 +60,14 @@ export default function HowItWorks(): React.ReactElement {
         Math.floor(progress * STEPS.length)
       );
 
-      setActiveIndex(Math.max(0, newIndex));
+      const clampedIndex = Math.max(0, newIndex);
+
+      if (clampedIndex !== prevIndexRef.current) {
+        setDirection(clampedIndex > prevIndexRef.current ? 1 : -1);
+        prevIndexRef.current = clampedIndex;
+        setActiveIndex(clampedIndex);
+      }
+
       ticking = false;
     }
 
@@ -79,7 +88,11 @@ export default function HowItWorks(): React.ReactElement {
   }, []);
 
   const handleStepClick = (index: number) => {
-    setActiveIndex(index);
+    if (index !== activeIndex) {
+      setDirection(index > activeIndex ? 1 : -1);
+      prevIndexRef.current = index;
+      setActiveIndex(index);
+    }
     const container = containerRef.current;
     if (!container) return;
 
@@ -111,6 +124,24 @@ export default function HowItWorks(): React.ReactElement {
     }
   };
 
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? -70 : 70,
+      opacity: 0,
+      scale: 0.97,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? 70 : -70,
+      opacity: 0,
+      scale: 0.97,
+    }),
+  };
+
   return (
     <section
       ref={containerRef}
@@ -118,11 +149,12 @@ export default function HowItWorks(): React.ReactElement {
       className="relative bg-white text-slate-900"
     >
       {/* Background Subtle Mesh Grid & Radial Glow */}
-      
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40" />
+
       {/* Sticky Viewport Container */}
       <div className="sticky top-0 flex h-screen w-full flex-col justify-center overflow-hidden">
         {/* Soft background ambient radial gradient */}
-       
+    
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-8 sm:px-8">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
@@ -130,24 +162,21 @@ export default function HowItWorks(): React.ReactElement {
             {/* Left Column: Editorial & Step Navigation (42% width) */}
             <div className="flex flex-col justify-center lg:col-span-5">
               {/* Eyebrow */}
-              <div className="inline-flex items-center gap-2">
-               
-              </div>
+
 
               {/* Headline */}
               <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl leading-[1.15]">
                 From exam creation to instant results.
               </h2>
 
-              <p className="mt-3 text-sm text-slate-600 sm:text-base">
-                Everything required for secure, seamless digital assessments in four automated steps.
-              </p>
+        
 
               {/* Step Navigation Component */}
               <div className="mt-8">
                 <StepNavigation
                   steps={STEPS}
                   activeIndex={activeIndex}
+                  direction={direction}
                   onStepClick={handleStepClick}
                 />
               </div>
@@ -156,27 +185,17 @@ export default function HowItWorks(): React.ReactElement {
             {/* Right Column: Product Showcase UI Mockups (58% width) */}
             <div className="flex items-center justify-center lg:col-span-7">
               <ProductFrame activeStep={activeIndex}>
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
                     key={activeIndex}
-                    initial={
-                      shouldReduceMotion
-                        ? { opacity: 0 }
-                        : { opacity: 0, y: 15, scale: 0.97 }
-                    }
-                    animate={
-                      shouldReduceMotion
-                        ? { opacity: 1 }
-                        : { opacity: 1, y: 0, scale: 1 }
-                    }
-                    exit={
-                      shouldReduceMotion
-                        ? { opacity: 0 }
-                        : { opacity: 0, y: -15, scale: 0.97 }
-                    }
+                    custom={direction}
+                    variants={shouldReduceMotion ? undefined : slideVariants}
+                    initial={shouldReduceMotion ? { opacity: 0 } : "enter"}
+                    animate={shouldReduceMotion ? { opacity: 1 } : "center"}
+                    exit={shouldReduceMotion ? { opacity: 0 } : "exit"}
                     transition={{
-                      duration: 0.4,
-                      ease: [0.16, 1, 0.3, 1],
+                      duration: 0.45,
+                      ease: [0.25, 1, 0.5, 1],
                     }}
                     className="w-full"
                   >
