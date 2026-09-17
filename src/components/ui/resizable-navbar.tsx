@@ -8,7 +8,7 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 
 interface NavbarProps {
@@ -61,6 +61,19 @@ export const Navbar = ({ children, className }: NavbarProps) => {
     }
   });
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setVisible(true);
+      } else {
+        setVisible(false);
+      }
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <motion.div
       className={cn("fixed inset-x-0 top-3 z-50 w-full px-4 sm:px-6 pointer-events-none", className)}
@@ -83,12 +96,14 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   return (
     <motion.div
       animate={{
-        backdropFilter: visible ? "blur(16px)" : "none",
+        backdropFilter: visible ? "blur(20px) saturate(180%)" : "blur(0px)",
         boxShadow: visible
-          ? "0 20px 40px -15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15)"
+          ? "0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2)"
           : "none",
         width: visible ? "60%" : "100%",
         y: visible ? 4 : 0,
+        backgroundColor: visible ? "rgba(43, 19, 48, 0.4)" : "rgba(0, 0, 0, 0)",
+        borderColor: visible ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0)",
       }}
       transition={{
         type: "spring",
@@ -99,8 +114,8 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         minWidth: visible ? "620px" : "100%",
       }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full flex-row items-center justify-between rounded-full bg-transparent px-6 py-3 lg:flex transition-colors duration-300",
-        visible && "bg-[#2B1330]/90 border border-white/20 text-white shadow-2xl",
+        "relative z-[60] mx-auto hidden w-full flex-row items-center justify-between rounded-full border border-transparent px-6 py-3 lg:flex text-white transition-colors duration-300",
+        visible && "backdrop-blur-xl shadow-2xl",
         className,
       )}
     >
@@ -146,15 +161,17 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
   return (
     <motion.div
       animate={{
-        backdropFilter: visible ? "blur(16px)" : "none",
+        backdropFilter: visible ? "blur(20px) saturate(180%)" : "blur(0px)",
         boxShadow: visible
-          ? "0 20px 40px -15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15)"
+          ? "0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2)"
           : "none",
         width: visible ? "92%" : "100%",
         paddingRight: visible ? "16px" : "8px",
         paddingLeft: visible ? "16px" : "8px",
         borderRadius: visible ? "1.5rem" : "2rem",
         y: visible ? 4 : 0,
+        backgroundColor: visible ? "rgba(43, 19, 48, 0.4)" : "rgba(0, 0, 0, 0)",
+        borderColor: visible ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 255, 255, 0)",
       }}
       transition={{
         type: "spring",
@@ -162,8 +179,8 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
         damping: 30,
       }}
       className={cn(
-        "relative z-50 mx-auto flex w-full flex-col items-center justify-between bg-transparent px-4 py-2.5 lg:hidden transition-colors duration-300",
-        visible && "bg-[#2B1330]/90 border border-white/20 text-white shadow-2xl",
+        "relative z-50 mx-auto flex w-full flex-col items-center justify-between border border-transparent px-4 py-2.5 lg:hidden text-white transition-colors duration-300",
+        visible && "backdrop-blur-xl shadow-2xl",
         className,
       )}
     >

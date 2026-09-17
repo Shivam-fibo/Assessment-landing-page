@@ -8,11 +8,13 @@ import CtaBanner from "@/src/CtaBanner";
 import FaqSection from "@/src/FaqSection";
 import TestimonialsSection from "@/src/TestimonialsSection";
 import Footer from "@/src/Footer";
+import HowItWorks from "@/src/HowItWorks";
 
 export default function Home() {
   return (
     <main>
       <Hero />
+      <HowItWorks/>
       <StatsSection />
       <FeatureShowcase />
       <CommunitySection />
