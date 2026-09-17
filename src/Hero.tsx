@@ -19,7 +19,7 @@ export default function Hero(): React.ReactNode {
   return (
     <section
       className="relative overflow-hidden bg-cover bg-center bg-no-repeat pt-2 pb-12 min-h-screen flex flex-col justify-start"
-      style={{ backgroundImage: "url('/images/image6.png')" }}
+      style={{ backgroundImage: "url('/images/image7.png')" }}
     >
       <div className="relative z-10 flex flex-col">
         {/* Integrated Fixed Header */}
