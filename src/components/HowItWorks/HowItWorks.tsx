@@ -10,7 +10,7 @@ import {
 } from "motion/react";
 import StepHeader from "./StepHeader";
 import StepProgressIndicator from "./StepProgressIndicator";
-import StepStory from "./StepStory";
+import StepFeatureCard from "./StepFeatureCard";
 import { StepItem } from "./types";
 
 export const STEPS = [
@@ -61,6 +61,10 @@ export default function HowItWorks(): React.ReactElement {
     setActiveStepIndex(clampedStep);
   });
 
+  const handleNextStep = () => {
+    setActiveStepIndex((prev) => (prev + 1) % STEPS.length);
+  };
+
   // Subtle background color transition between steps
   const backgroundColor = useTransform(
     scrollYProgress,
@@ -93,17 +97,18 @@ export default function HowItWorks(): React.ReactElement {
               <StepProgressIndicator
                 activeStepIndex={activeStepIndex}
                 steps={STEPS as unknown as readonly StepItem[]}
+                onSelectStep={setActiveStepIndex}
                 progress={scrollYProgress}
                 shouldReduceMotion={shouldReduceMotion}
               />
             </div>
 
-            {/* Right Column (~60% desktop width): Visual Canvas & Story Content */}
+            {/* Right Column (~60% desktop width): Feature Card */}
             <div className="lg:col-span-7 flex flex-col justify-center">
-              <StepStory
+              <StepFeatureCard
                 activeStepIndex={activeStepIndex}
                 steps={STEPS as unknown as readonly StepItem[]}
-                progress={scrollYProgress}
+                onNextStep={handleNextStep}
                 shouldReduceMotion={shouldReduceMotion}
               />
             </div>

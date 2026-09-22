@@ -6,6 +6,7 @@ import { StepItem } from "./types";
 interface StepProgressIndicatorProps {
   activeStepIndex?: number;
   steps: readonly StepItem[];
+  onSelectStep?: (index: number) => void;
   progress?: unknown;
   shouldReduceMotion?: boolean | null;
 }
@@ -13,6 +14,7 @@ interface StepProgressIndicatorProps {
 export default function StepProgressIndicator({
   activeStepIndex = 0,
   steps,
+  onSelectStep,
 }: StepProgressIndicatorProps): React.ReactElement {
   return (
     <div className="flex flex-col gap-3.5 w-full">
@@ -20,9 +22,11 @@ export default function StepProgressIndicator({
         const isActive = idx === activeStepIndex;
 
         return (
-          <div
+          <button
+            type="button"
             key={step.number}
-            className={`flex items-start gap-4 p-4 rounded-xl border transition-all duration-200 ${
+            onClick={() => onSelectStep?.(idx)}
+            className={`flex items-start gap-4 p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
               isActive
                 ? "bg-white border-indigo-500/40 shadow-sm ring-1 ring-indigo-500/10"
                 : "bg-slate-50/80 border-slate-200/80 hover:bg-white"
@@ -48,7 +52,7 @@ export default function StepProgressIndicator({
                 {step.title}
               </h3>
             </div>
-          </div>
+          </button>
         );
       })}
     </div>
