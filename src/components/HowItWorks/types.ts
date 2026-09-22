@@ -5,6 +5,7 @@ export interface StepItem {
   readonly tag: string;
   readonly title: string;
   readonly description: string;
+  readonly image?: string;
 }
 
 export interface StepComponentProps {

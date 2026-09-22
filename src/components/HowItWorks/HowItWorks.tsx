@@ -9,7 +9,7 @@ import {
   useReducedMotion,
 } from "motion/react";
 import StepHeader from "./StepHeader";
-import StepProgressIndicator from "./StepProgressIndicator";
+import StepLeftContent from "./StepLeftContent";
 import StepFeatureCard from "./StepFeatureCard";
 import { StepItem } from "./types";
 
@@ -20,6 +20,7 @@ export const STEPS = [
     title: "Create the assessment",
     description:
       "Build question banks, configure marks and pass criteria, set the exam duration, and control how questions and options are presented.",
+    image: "/images/how_it_works/image1.png",
   },
   {
     number: "02",
@@ -27,6 +28,7 @@ export const STEPS = [
     title: "Students enter securely",
     description:
       "Students sign in using their Student ID and the platform manages active sessions to prevent account sharing across devices.",
+    image: "/images/how_it_works/image2.png",
   },
   {
     number: "03",
@@ -34,6 +36,7 @@ export const STEPS = [
     title: "Run the exam",
     description:
       "The assessment runs with automatic saving, countdown timing, fullscreen monitoring, and tracking of important exam activity.",
+    image: "/images/how_it_works/image3.png",
   },
   {
     number: "04",
@@ -41,6 +44,7 @@ export const STEPS = [
     title: "Get instant results",
     description:
       "Submissions are evaluated automatically, giving administrators performance insights while students receive their scores and detailed subject-wise results.",
+    image: "/images/how_it_works/image4.png",
   },
 ] as const;
 
@@ -91,19 +95,13 @@ export default function HowItWorks(): React.ReactElement {
           <StepHeader />
 
           {/* Two-Column Content Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-14">
-            {/* Left Column (~40% desktop width): Step Navigation */}
-            <div className="lg:col-span-5 flex flex-col justify-center">
-              <StepProgressIndicator
-                activeStepIndex={activeStepIndex}
-                steps={STEPS as unknown as readonly StepItem[]}
-                onSelectStep={setActiveStepIndex}
-                progress={scrollYProgress}
-                shouldReduceMotion={shouldReduceMotion}
-              />
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-start justify-between gap-10 lg:gap-20">
+            {/* Left Column (~5 cols): Benefit Statement (Top-Left aligned) */}
+            <div className="lg:col-span-5 flex flex-col justify-start pt-1 sm:pt-2">
+              <StepLeftContent />
             </div>
 
-            {/* Right Column (~60% desktop width): Feature Card */}
+            {/* Right Column (~7 cols): Feature Card */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               <StepFeatureCard
                 activeStepIndex={activeStepIndex}
