@@ -1,19 +1,7 @@
 import Header from "./Header";
 import { PointerHighlight } from "./components/ui/pointer-highlight";
-// Placeholder institution names for the trusted-by strip.
-const TRUSTED_INSTITUTIONS: readonly string[] = [
-  "Stanford Prep",
-  "Oakridge International",
-  "Delta University",
-  "Green Valley High",
-  "Bright Path Academy",
-];
 
-const HERO_STATS = [
-  { value: "94%", label: "Reduced grading time" },
-  { value: "50K+", label: "Exams conducted" },
-  { value: "99.9%", label: "Uptime & security" },
-];
+
 
 export default function Hero(): React.ReactNode {
   return (
