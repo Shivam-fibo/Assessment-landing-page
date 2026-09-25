@@ -101,11 +101,12 @@ export default function HowItWorks(): React.ReactElement {
               <StepLeftContent />
             </div>
 
-            {/* Right Column (~7 cols): Feature Card */}
+            {/* Right Column (~7 cols): Feature Card Stack */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               <StepFeatureCard
                 activeStepIndex={activeStepIndex}
                 steps={STEPS as unknown as readonly StepItem[]}
+                progress={scrollYProgress}
                 onNextStep={handleNextStep}
                 shouldReduceMotion={shouldReduceMotion}
               />
