@@ -62,32 +62,37 @@ export default function StatsSection() {
   const container = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="bg-slate-50 py-12 relative overflow-hidden">
-      {/* Top Left Section Header */}
-      <div className="w-11/12 max-w-6xl mx-auto mb-6 text-left relative z-20">
-        <h2 className="text-2xl sm:text-4xl font-bold text-[#2B1330] tracking-tight">
-          Designed for Educators, Built for Scale
-        </h2>
-      </div>
+    <section
+      ref={container}
+      style={{ height: `${cards.length * 75 + 20}vh` }}
+      className="bg-slate-50 py-12 relative w-full"
+    >
+      <div className="sticky top-0 pt-20 pb-6 w-full flex flex-col justify-start">
+        {/* Top Left Section Header */}
+        <div className="w-11/12 max-w-6xl mx-auto mb-6 text-left relative z-20">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#2B1330] tracking-tight">
+            Designed for Educators, Built for Scale
+          </h2>
+        </div>
 
-      <div
-        className="h-[640px] bg-transparent overflow-auto text-slate-900 scrollbar-thin scrollbar-thumb-slate-300 relative z-10"
-        ref={container}
-      >
         <StackingCards
           totalCards={cards.length}
-          scrollOptions={{ container: container }}
+          scrollOptions={{ target: container }}
         >
-
           {cards.map(
             ({ title, titleColor, description, bgColor, borderColor, image }, index) => {
               return (
-                <StackingCardItem key={index} index={index} className="h-[620px]">
+                <StackingCardItem
+                  key={index}
+                  index={index}
+                  topPosition={`${100 + index * 14}px`}
+                  className="h-[520px]"
+                >
                   <div
                     className={cn(
                       bgColor,
                       borderColor,
-                      "bg-white border shadow-2xl h-[85%] sm:h-[75%] flex-col md:flex-row flex w-11/12 max-w-6xl rounded-t-3xl rounded-b-xl mx-auto relative overflow-hidden z-10 opacity-100 items-stretch"
+                      "bg-white border shadow-2xl h-[440px] flex-col md:flex-row flex w-11/12 max-w-6xl rounded-3xl mx-auto relative overflow-hidden z-10 opacity-100 items-stretch"
                     )}
                   >
                     {/* Left text column - Only Title and Description */}
@@ -120,13 +125,6 @@ export default function StatsSection() {
               );
             }
           )}
-
-          {/* Bottom Watermark / Branding Footer */}
-          <div className="w-full h-48 relative overflow-hidden flex items-end justify-center">
-            <h2 className="text-[64px] sm:text-[120px] font-black tracking-widest text-[#2B1330]/10 uppercase select-none pointer-events-none translate-y-6">
-              ASSESSMENT
-            </h2>
-          </div>
         </StackingCards>
       </div>
     </section>
