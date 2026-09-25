@@ -76,7 +76,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
 
   return (
     <motion.div
-      className={cn("fixed inset-x-0 top-3 z-50 w-full px-4 sm:px-6 pointer-events-none", className)}
+      className={cn("fixed inset-x-0 top-3 z-[100] w-full px-4 sm:px-6 pointer-events-none", className)}
     >
       <div className="pointer-events-auto mx-auto max-w-7xl">
         {React.Children.map(children, (child) =>
@@ -114,7 +114,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         minWidth: visible ? "620px" : "100%",
       }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full flex-row items-center justify-between rounded-full border border-transparent px-6 py-3 lg:flex text-white transition-colors duration-300",
+        "relative z-[101] mx-auto hidden w-full flex-row items-center justify-between rounded-full border border-transparent px-6 py-3 lg:flex text-white transition-colors duration-300",
         visible && "backdrop-blur-xl shadow-2xl",
         className,
       )}
@@ -179,7 +179,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
         damping: 30,
       }}
       className={cn(
-        "relative z-50 mx-auto flex w-full flex-col items-center justify-between border border-transparent px-4 py-2.5 lg:hidden text-white transition-colors duration-300",
+        "relative z-[101] mx-auto flex w-full flex-col items-center justify-between border border-transparent px-4 py-2.5 lg:hidden text-white transition-colors duration-300",
         visible && "backdrop-blur-xl shadow-2xl",
         className,
       )}
